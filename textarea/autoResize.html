@@ -1,0 +1,57 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=EUC-KR">
+<title>Insert title here</title>
+<script type="text/JavaScript" src="./jquery-3.2.1.min.js"></script>
+<style>
+// 방법 1: JavaScript
+textarea.autosize1 { min-height: 50px; }
+// 방법 2: JavaScript
+textarea.autosize2 { min-height: 50px; }
+</style>
+
+<script>
+// 방법 1: JavaScript
+function resize(obj) {
+  obj.style.height = "1px";
+  obj.style.height = (12+obj.scrollHeight)+"px";
+}
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){
+	// 방법 2: JavaScript
+	$('textarea.autosize2').on('keydown keyup', function () {
+	  $(this).height(1).height( $(this).prop('scrollHeight')+12 );	
+	});
+
+	$("#btnTest").click(function(){
+		$('textarea.autosize1').val($("#txtText").val());
+		$('textarea.autosize1').trigger('keyup');
+		//$('textarea.autosize1').keyup(); 이것도 결과는 동일함
+		$('textarea.autosize2').val($("#txtText").val());
+		$('textarea.autosize2').trigger('keyup');
+		//$('textarea.autosize2').keyup();  이것도 결과는 동일함
+	});
+});
+</script>
+
+</head>
+<body>
+방법 1: JavaScript
+<br/>
+<textarea class="autosize1" onkeydown="resize(this)" onkeyup="resize(this)" placeholder="방법 1: JavaScript"></textarea>
+<br/>
+<br/>
+방법 2: jQuery
+<br/>
+<textarea class="autosize2" placeholder="방법 2: jQuery"></textarea>
+<br/>
+<br/>
+1번과 2번에 복사후 autosize
+<br/>
+<input type="text" id="txtText" size = 100 value="와b에 공통된자료). 조회수: 7,016 yellow. J 3 textarea에 입력된 문장을 선택하면 태그선택 미니바가 나타납니다. textarea문장을 선택하면 태그를 선택할 수 있는 작은 미니메뉴가 나타납니다. 메뉴중 하나를 클릭하면 해당 태그가 ..."/>
+<button id="btnTest">복사</button>
+</body>
+</html>
