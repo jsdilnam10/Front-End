@@ -1,64 +1,105 @@
-
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-  <title></title>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title></title>
+<style>
+#content_wrap { width: 500px; text-align: center; margin: 0 auto;}
+textarea { border:1pt solid; border-color:#777777; overflow: hidden; resize:none; }
+textarea.autosize1 { width: 90%; } 
+textarea.autosize2 { width: 90%; }
+textarea#recmt_memo { width : 90%; background-color: #EFE4B0; padding: 5px 5px 15px 5px;} /* padding값 주어야 화면 떨림 방지 */
+input#txtText { width : 410px; height: 30px; }
+.height_plus{ 
+  margin:10px auto; padding:0; font-size:16px; width: 200px; height: 40px; line-height: 40px; 
+  background-color:#B8CDE3; border:1px solid #ddd; text-align:center; }
+</style>
 </head>
 
 <BODY onLoad="textareaHeightOnload()">
-  <div class=height_plus> 늘리기 </div>
- <textarea id='recmt_memo' name='memo' style="border:1pt solid; border-color:#777777; width:100%; height:100px; overflow:visible; resize:none;" onKeyup="textareaSetLine(this)"></textarea>
- <textarea id='recmt_memo2' name='memo' style="border:1pt solid; border-color:#777777; width:100%; height:102px; overflow:visible; resize:none;" onKeyup="textareaSetLine(this)"></textarea>
-</BODY>
+<div id="content_wrap">
+ <div class=height_plus> 높이 늘리기(100px) </div>
+ <hr>  
+방법 1: JavaScript
+<br/>
+<textarea class="autosize1" onkeydown="resize(this)" onkeyup="resize(this)" placeholder="방법 1: JavaScript"></textarea>
+<br/>
+<br/>
+방법 2: jQuery
+<br/>
+<textarea class="autosize2" placeholder="방법 2: jQuery"></textarea>
+<br/>
+<br/>
+1번과 2번에 복사후 autosize
+<br/>
+<input type="text" id="txtText" size = 100 value="와b에 공통된자료). 조회수: 7,016 yellow. J 3 textarea에 입력된 문장을 선택하면 태그선택 미니바가 나타납니다. textarea문장을 선택하면 태그를 선택할 수 있는 작은 미니메뉴가 나타납니다. 메뉴중 하나를 클릭하면 해당 태그가 ..."/>
+<button id="btnTest">복사</button>
 
+<br><br> <hr> <br><br>
+
+방법 3: 추가로 높이 지정해주기 $("#recmt_memo").height(txtarea.scrollHeight+100); <br/>
+
+<textarea id='recmt_memo' name='memo' placeholder="방법 3: 높이추가" onKeyup="textareaSetLine(this)"></textarea> 
+<!-- <textarea id='recmt_memo' name='memo' onKeyup="resize(this)"></textarea> -->
+
+<h4>복사 버튼으로 내용을 추가하고 늘리기 버튼을 클릭하면 </h4>
+<h4>방법 1, 2는 사이즈가 다시 원래대로 돌아온다. </h4>
+<h4>그런데 댓글창이 프레임으로 include 되어 있어서  </h4>
+<h4>댓글창을 resize 해줘야 함. </h4>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 <!-- 참고 http://elradiun.tistory.com/38 -->
 <SCRIPT type="text/javascript">
- function textareaSetLine(textarea)
- {d
- /*
-  var currentHeight = textarea.style.pixelHeight;
-  var overHeight = textarea.scrollHeight;
+// 방법 1: JavaScript
+function resize(obj) {
+  obj.style.height = "1px";
+  obj.style.height = (12+obj.scrollHeight)+"px";
+}
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){
+  // 방법 2: JavaScript
+  $('textarea.autosize2').on('keydown keyup', function () {
+    $(this).height(1).height( $(this).prop('scrollHeight')+12 );  
+  });
+
+  $("#btnTest").click(function(){
+    $('textarea.autosize1').val($("#txtText").val());
+    $('textarea.autosize1').trigger('keyup');
+    //$('textarea.autosize1').keyup(); 이것도 결과는 동일함
+    $('textarea.autosize2').val($("#txtText").val());
+    $('textarea.autosize2').trigger('keyup');
+    //$('textarea.autosize2').keyup();  이것도 결과는 동일함
+    $('textarea#recmt_memo').val($("#txtText").val());
+    $('textarea#recmt_memo').trigger('keyup');
+  });
+});
+
+
+function textareaSetLine(txtarea) {
+/*var currentHeight = txtarea.style.pixelHeight;
+  var overHeight = txtarea.scrollHeight;
 
   if(overHeight >= currentHeight)
-   textarea.style.pixelHeight = overHeight + 5;
- */ 
+   txtarea.style.pixelHeight = overHeight + 5;  */ 
 
-  if(textarea.scrollHeight > textarea.clientHeight)
-   textarea.style.height = textarea.scrollHeight + 15; // 폰트 사이즈에 따라 값이 달라질 수 있나?
- }
-
- function textareaHeightOnload()
- {
- // var textarea = document.forms[0].elements['memo'];
-  var textarea = document.getElementsByTagName("textarea");
-
-  for(var i = 0; i < textarea.length; i++)
-  {
-   var newHeight = textarea[i].scrollHeight;
-
-   alert(newHeight); // 98 위아래 선이 있어서 그런듯.
-
-   if(newHeight <= 100) // 처음 기본 높이를 설정한다.
-    newHeight = 100;
-
-   textarea[i].style.height = newHeight + 15;
+  if(txtarea.scrollHeight > txtarea.clientHeight) {
+    txtarea.style.height = txtarea.scrollHeight + 14 + "px"; // 폰트 사이즈에 따라 값이 달라질 수 있나?
   }
- }
+}
 
 
- $(".height_plus").on("click", function(){
-  /*alert();*/
-  
-  /*document.getElementById('recmt_memo').rows =+ 30;*/
-  $("#recmt_memo").height(300);
-  /*var that = document.getElementById("recmt_memo");*/
-  /*resize_txtarea(that, 447);*/
+$(".height_plus").on("click", function(){
+  /*창 크기가 유동적으로 변할 때에는 rows의 증감이 의미가 없다.*/
+  /*document.getElementById('recmt_memo').rows =+ 30; */
+  $(".autosize1, .autosize2").height(100);
 
-
+  var txtarea = document.getElementById("recmt_memo");
+  $("#recmt_memo").height(txtarea.scrollHeight+100);
 });
 
 </SCRIPT>
-
-
+</div>
+</body>
 
 </html>
